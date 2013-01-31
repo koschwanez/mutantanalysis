@@ -1,0 +1,23 @@
+<div class="yui-g allele_entry">
+	<div class="yui-u first">
+		<div class="yui-g">
+			<div class="yui-u first allele_info">
+				<h3 class="gene_name">$GENE_NAME</h3>
+				<h4 class="gene_type">$GENE_TYPE</h4>
+				<p class="sgdid">$SGDID</p>
+				<p><a class="sgd_link" href="http://www.yeastgenome.org/cgi-bin/locus.fpl?locus=$SGDID">SGD</a></p>
+				<p><a class="fungal_alignment" href="http://www.yeastgenome.org/cache/fungi/$FEATURE_NAME.html">Fungal alignment</a></p>
+			</div>
+			<div class="yui-u alignment_info">
+				<h4 class="protein_or_dna">$PROTEIN_OR_DNA</h4>
+				<p class="dna_links"><a class="file_link" href="$DNA_FASTA_FILE">DNA fasta</a></p>
+				<p class="dna_links"><a class="file_link" href="$DNA_ALIGNMENT_FILE">DNA alignment</a></p>
+				$PROTEIN_FASTA_FILE
+				$PROTEIN_ALIGNMENT_FILE
+			</div>
+		</div>
+	</div>
+	<div class="yui-u mismatch_info">
+		$MUTATION_INFO
+	</div>
+</div>
