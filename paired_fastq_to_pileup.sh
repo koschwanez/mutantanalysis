@@ -145,7 +145,7 @@ java -Xmx2g -jar $gatk \
 echo "now indexing realigned file"
 samtools index $basefilename.bam
 
-"Now creating pileup"
+echo "Now creating pileup"
 samtools mpileup \
 	-f $refseq \
 	$basefilename.bam > $basefilename.pileup
