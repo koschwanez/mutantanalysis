@@ -12,6 +12,7 @@ with links to read data and alignments.
 import os
 import os.path
 import shutil
+import subprocess
 import sys
 import argparse
 import datetime
@@ -48,7 +49,7 @@ CSS_FILE = os.path.join(CURDIR, 'mutantanalysis.css')
 BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  # Yahoo API. May need to update.
 TABBED_OUTPUT = os.path.join(CURDIR, 'tabbed_output.txt')
 MUTATION_OUTPUT = os.path.join(CURDIR, 'mutation_output.txt')
-CLUSTAL_BINARY = '/usr/bin/clustalw'
+CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
 
 
 def segregant_analysis_with_clone(
@@ -1811,7 +1812,6 @@ def main(argv=None):
     parser.add_argument('--seg_percent', default=90, type=int,
             help="Percentage to call segregant")
     all_args = parser.parse_args()
-    print(all_args.title)
 
     if (all_args.pool_bam and all_args.pool_snp and all_args.pool_indel):
         if not (all_args.add_clone_bam or all_args.add_clone_snp or all_args.add_clone_indel):

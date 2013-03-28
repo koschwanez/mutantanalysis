@@ -1,7 +1,11 @@
 #! /bin/bash
 
 # segtools
-# Tools to find mutations in an experimental evolution experiment.
+# Tools to find mutations between a set of samples. This was written to be
+# used to analyze experimentally evolved and backcrossed yeast strains.
+# Author: John Koschwanez
+#
+# There are three programs to run
 # Required options;
 #   -b basename of all generated files
 #   -r reference fasta sequence. Must be indexed by bwa and samtools
@@ -15,9 +19,9 @@
 
 usage()
 {
-    echo "Usage: $PROGRAM -a sampleR1 -c sample_name [-g GATK_path] [-h help] -r reference.fasta singlef2p"
-    echo "Usage: $PROGRAM -a sampleR1 -b sampleR2 -c sample_name [-g GATK_path] [-h help] -r reference.fasta pairedf2p"
-    echo "Usage: $PROGRAM -a ancestorR1 [-b ancestorR2] [-c ancestor_name] -d cloneR1 [-e cloneR2] [-f clone_name] [-g GATK_path] [-h help] -i poolR1 [-j poolR2] [-k pool_name] -r reference.fasta acps"
+    echo "Usage: $PROGRAM singlef2p -a sampleR1 -c sample_name [-g GATK_path] [-h help] -r reference.fasta"
+    echo "Usage: $PROGRAM pairedf2p -a sampleR1 -b sampleR2 -c sample_name [-g GATK_path] [-h help] -r reference.fasta"
+    echo "Usage: $PROGRAM acps -a ancestorR1 [-b ancestorR2] [-c ancestor_name] -d cloneR1 [-e cloneR2] [-f clone_name] [-g GATK_path] [-h help] -i poolR1 [-j poolR2] [-k pool_name] -r reference.fasta -s reference_features [-t analysis_title]"
 }
 
 usage_and_exit()
@@ -200,6 +204,16 @@ PROGRAM=`basename $0`
 PROGRAMDIR=`dirname $0`
 VERSION=0.1
 
+case $1 in
+    acps) routine="acps"
+        ;;
+    singlef2p) routine="singlef2p"
+        ;;
+    pairedf2p) routine="pairedf2p"
+        ;;
+esac
+shift
+
 while getopts :a:b:c:d:e:f:g:hi:j:k:o:r:s:t:v: opt
 do
     case $opt in
@@ -253,8 +267,7 @@ then
     exit 1
 fi
 
-
-case $1 in
+case $routine in
     acps) echo "ancestor clone pool segregant analysis"
         echo ${ancestor_name:="ancestor"} > /dev/null
         echo ${clone_name:="clone"} > /dev/null
@@ -318,11 +331,11 @@ case $1 in
             --min-coverage 4 --min-reads2 2 --min-var-freq 0.05 --p-value 0.5 \
             > $pool_name.snp
 
-        java -jar $varscan pileup2indel $pool_name.pileup
+        java -jar $varscan pileup2indel $pool_name.pileup \
             --min-coverage 4 --min-reads2 2 --min-var-freq 0.05 --p-value 0.5 \
             > $pool_name.indel
 
-        mkdir seg_output
+        mkdir $output_dir
 
         python $PROGRAMDIR/mutantanalysis.py \
             --title $anal_title \
@@ -357,6 +370,4 @@ case $1 in
         ;;
 esac
 exit 0
-
-
 
