@@ -1,0 +1,82 @@
+CLUSTAL 2.1 multiple sequence alignment
+
+
+ref_sequence_ACE2_ORF      MDNVVDPWYINPSGFAKDTQDEEYVQHHDNVNPTIPPPDNYILNNENDDG 50
+yJHK459_ACE2_ORF           MDNVVDPWYINPSGFAKDTQDEEYVQHHDNVNPTIPPPDNYILNNENDDG 50
+3_481_ACE2_ORF             MDNVVDPWYINPSGFAKDTQDEEYVQHHDNVNPTIPPPDNYILNNENDDG 50
+                           **************************************************
+
+ref_sequence_ACE2_ORF      LDNLLGMDYYNIDDLLTQELRDLDIPLVPSPKTGDGSSDKKNIDRTWNLG 100
+yJHK459_ACE2_ORF           LDNLLGMDYYNIDDLLTQELRDLDIPLVPSPKTGDGSSDKKNIDRTWNLG 100
+3_481_ACE2_ORF             LDNLLGMDYYNIDDLLTQELRDLDIPLVPSPKTGDGSSDKKNIDRTWNLG 100
+                           **************************************************
+
+ref_sequence_ACE2_ORF      DENNKVSHYSKKSMSSHKRGLSGTAIFGFLGHNKTLSISSLQQSILNMSK 150
+yJHK459_ACE2_ORF           DENNKVSHYSKKSMSSHKRGLSGTAIFGFLGHNKTLSISSLQQSILNMSK 150
+3_481_ACE2_ORF             DENNKVSHYSKKSMSSHKRGLSGTAIFGFLGHNKTLSISSLQQSILNMSK 150
+                           **************************************************
+
+ref_sequence_ACE2_ORF      DPQPMELINELGNHNTVKNNNDDFDHIRENDGENSYLSQVLLKQQEELRI 200
+yJHK459_ACE2_ORF           DPQPMELINELGNHNTVKNNNDDFDHIRENDGENSYLSQVLLKQQEELRI 200
+3_481_ACE2_ORF             DPQPMELINELGNHNTVKNNNDDFDHIRENDGENSYLSQVLLKQQEELRI 200
+                           **************************************************
+
+ref_sequence_ACE2_ORF      ALEKQKEVNEKLEKQLRDNQIQQEKLRKVLEEQEEVAQKLVSGATNSNSK 250
+yJHK459_ACE2_ORF           ALEKQKEVNEKLEKQLRDNQIQQEKLRKVLEEQEEVAQKLVSGATNSNSK 250
+3_481_ACE2_ORF             ALEKQKEVNEKLEKQLRDNQIQQEKLRKVLEEQEEVAQKLVSGATNSNSK 250
+                           **************************************************
+
+ref_sequence_ACE2_ORF      PGSPVILKTPAMQNGRMKDNAIIVTTNSANGGYQFPPPTLISPRMSNTSI 300
+yJHK459_ACE2_ORF           PGSPVILKTPAMQNGRMKDNAIIVTTNSANGGYQFPPPTLISPRMSNTSI 300
+3_481_ACE2_ORF             PGSPVILKTPAMQNGRMKDNAIIVTTNSANGGYQFPPPTLISPRMSNTSI 300
+                           **************************************************
+
+ref_sequence_ACE2_ORF      NGSPSRKYHRQRYPNKSPESNGLNLFSSNSGYLRDSELLSFSPQNYNLNL 350
+yJHK459_ACE2_ORF           NGSPSRKYHRQRYPNKSPESNGLNLFSSNSGYLRDSELLSFSPQNYNLNL 350
+3_481_ACE2_ORF             NGSPSRKYHRQRYPNKSPESNG---------------------------- 322
+                           **********************                            
+
+ref_sequence_ACE2_ORF      DGLTYNDHNNTSDKNNNDKKNSTGDNIFRLFEKTSPGGLSISPRINGNSL 400
+yJHK459_ACE2_ORF           DGLTYNDHNNTSDKNNNDKKNSTGDNIFRLFEKTSPGGLSISPRINGNSL 400
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      RSPFLVGTDKSRDDRYAAGTFTPRTQLSPIHKKRESVVSTVSTISQLQDD 450
+yJHK459_ACE2_ORF           RSPFLVGTDKSRDDRYAAGTFTPRTQLSPIHKKRESVVSTVSTISQLQDD 450
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      TEPIHMRNTQNPTLRNANALASSSVLPPIPGSSNNTPIKNSLPQKHVFQH 500
+yJHK459_ACE2_ORF           TEPIHMRNTQNPTLRNANALASSSVLPPIPGSSNNTPIKNSLPQKHVFQH 500
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      TPVKAPPKNGSNLAPLLNAPDLTDHQLEIKTPIRNNSHCEVESYPQVPPV 550
+yJHK459_ACE2_ORF           TPVKAPPKNGSNLAPLLNAPDLTDHQLEIKTPIRNNSHCEVESYPQVPPV 550
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      THDIHKSPTLHSTSPLPDEIIPRTTPMKITKKPTTLPPGTIDQYVKELPD 600
+yJHK459_ACE2_ORF           THDIHKSPTLHSTSPLPDEIIPRTTPMKITKKPTTLPPGTIDQYVKELPD 600
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      KLFECLYPNCNKVFKRRYNIRSHIQTHLQDRPYSCDFPGCTKAFVRNHDL 650
+yJHK459_ACE2_ORF           KLFECLYPNCNKVFKRRYNIRSHIQTHLQDRPYSCDFPGCTKAFVRNHDL 650
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      IRHKISHNAKKYICPCGKRFNREDALMVHRSRMICTGGKKLEHSINKKLT 700
+yJHK459_ACE2_ORF           IRHKISHNAKKYICPCGKRFNREDALMVHRSRMICTGGKKLEHSINKKLT 700
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      SPKKSLLDSPHDTSPVKETIARDKDGSVLMKMEEQLRDDMRKHGLLDPPP 750
+yJHK459_ACE2_ORF           SPKKSLLDSPHDTSPVKETIARDKDGSVLMKMEEQLRDDMRKHGLLDPPP 750
+3_481_ACE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_ACE2_ORF      STAAHEQNSNRTLSNETDAL 770
+yJHK459_ACE2_ORF           STAAHEQNSNRTLSNETDAL 770
+3_481_ACE2_ORF             --------------------
+                                               

@@ -1,0 +1,47 @@
+CLUSTAL 2.1 multiple sequence alignment
+
+
+ref_sequence_MTH1_ORF      MFVSPPPATSKNQVLQRRPLESTNSNHGFASSLQAIPENTMSGSDNASFQ 50
+yJHK459_MTH1_ORF           MFVSPPPATSKNQVLQRRPLESTNSNHGFASSLQAIPENTMSGSDNASFQ 50
+3_481_MTH1_ORF             MFVSPPPATSKNQVLQRRPLESTNSNHGFASSLQAIPENTMSGSDNASFQ 50
+                           **************************************************
+
+ref_sequence_MTH1_ORF      SLPLSMSSSQSTTSSRRENFVNAPPEYTDRARDEIKKRLLASSPSRRSHH 100
+yJHK459_MTH1_ORF           SLPLSMSSSQSTTSSRRENFVNAPPEYTDRARDEIKKRLLASSPSRRSHH 100
+3_481_MTH1_ORF             SLPLSMSSSQSTTSSRRENFVNAPPEYTDRARDEIKKRLLASSPSRRSHH 100
+                           **************************************************
+
+ref_sequence_MTH1_ORF      SSSMHSASRRSSVAESGSLLSDNASSYQSSIFSAPSTVHTQLTNDSSFSE 150
+yJHK459_MTH1_ORF           SSSMHSASRRSSVAESGSLLSDNASSYQSSIFSAPSTVHTQLTNDSSFSE 150
+3_481_MTH1_ORF             SSSMHSASRRSSVAESGSLLSDNASSYQSSIFSAPSTVHTQLTNDSSFSE 150
+                           **************************************************
+
+ref_sequence_MTH1_ORF      FPNHKLITRVSLDEALPKTFYDMYSPDILLADPSNILCNGRPKFTKRELL 200
+yJHK459_MTH1_ORF           FPNHKLITRVSLDEALPKTFYDMYSPDILLADPSNILCNGRPKFTKRELL 200
+3_481_MTH1_ORF             FPNTS--------------------------------------------- 155
+                           *** .                                             
+
+ref_sequence_MTH1_ORF      DWDLNDIRSLLIVEKLRPEWGNQLPEVITVGDNMPQFRLQLLPLYSSDET 250
+yJHK459_MTH1_ORF           DWDLNDIRSLLIVEKLRPEWGNQLPEVITVGDNMPQFRLQLLPLYSSDET 250
+3_481_MTH1_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_MTH1_ORF      IIATLVHSDLYMEANLDYEFKLTSAKYTVATARKRHEHITGRNEAVMNLS 300
+yJHK459_MTH1_ORF           IIATLVHSDLYMEANLDYEFKLTSAKYTVATARKRHEHITGRNEAVMNLS 300
+3_481_MTH1_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_MTH1_ORF      KPEWRNIIENYLLNIAVEAQCRFDFKQRCSEYKKWKLQQSNLKRPDMPPP 350
+yJHK459_MTH1_ORF           KPEWRNIIENYLLNIAVEAQCRFDFKQRCSEYKKWKLQQSNLKRPDMPPP 350
+3_481_MTH1_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_MTH1_ORF      SIIPRKNSTETKSLLKKALLKNIQLKNPNNNLDELMMRSSAATNQQGKNK 400
+yJHK459_MTH1_ORF           SIIPRKNSTETKSLLKKALLKNIQLKNPNNNLDELMMRSSAATNQQGKNK 400
+3_481_MTH1_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_MTH1_ORF      VSLSKEEKATIWSQCQAQVYQRLGLDWQPDSVS 433
+yJHK459_MTH1_ORF           VSLSKEEKATIWSQCQAQVYQRLGLDWQPDSVS 433
+3_481_MTH1_ORF             ---------------------------------
+                                                            

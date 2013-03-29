@@ -5,17 +5,8 @@
 # used to analyze experimentally evolved and backcrossed yeast strains.
 # Author: John Koschwanez
 #
-# There are three programs to run
-# Required options;
-#   -b basename of all generated files
-#   -r reference fasta sequence. Must be indexed by bwa and samtools
-#   -s sample fastq sequence for first pair (R1)
-#   -t sample fastq sequence for second pair (R2)
-# Optional options;
-#   -g location of GenomeAnalysisTK.jar: www.broadinstitute.org/gatk
-#       or can be set as $GATK in environemnt
-#   -i read group id. Normally flow cell & lane. basename by default.   
-# bwa and samtools need to be in environmental path
+# Please see the README file on my github site for better documentation.
+# https://github.com/koschwanez/mutantanalysis
 
 usage()
 {

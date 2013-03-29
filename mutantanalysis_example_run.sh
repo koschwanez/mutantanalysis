@@ -1,0 +1,15 @@
+python mutantanalysis.py \
+    --title evoclone2 \
+    --output_dir output_dir \
+    --ref_seq ref_seq/s288c_sgd.fa \
+    --ref_feat ref_seq/s288c_ref_annot.txt \
+    --ref_chrom_num ref_seq/s288c_chr_names.txt \
+    --ancestor_bam input_dir/yJHK459.realigned.bam \
+    --ancestor_name yJHK459 \
+    --clone_bam input_dir/3_481_clone.realigned.bam \
+    --clone_snp input_dir/3_481_clone_mutations.snp \
+    --clone_indel input_dir/3_481_clone_mutations.indel \
+    --clone_name 3_481 \
+    --pool_bam input_dir/yJHK566spores.realigned.bam \
+    --pool_snp input_dir/yJHK566spores.snp \
+    --pool_indel input_dir/yJHK566spores.indel \

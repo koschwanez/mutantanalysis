@@ -3,6 +3,8 @@ by John Koschwanez
 
 This is code I wrote to analyze the results of my experimental evolution. The segregant analysis part of the code accepts three sequences: the ancestor, the clone, and the backcrossed pool. The clone and ancestor are compared to find mutations, and then the segregating percentage of the backcrossed pool is found for each mutation to call a segregant.
 
+Please see the `compare.html` file in the `example_output` directory for an example output for read reads. I have included a script to make simulated reads in the `generate_test_seq` directory.
+
 Also included in this package is a script for generating simulated sequences from a backcrossed pool, and scripts for generating a samtools pileup from a fastq file. 
 
 #### Required programs

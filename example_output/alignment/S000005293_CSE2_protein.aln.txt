@@ -1,0 +1,17 @@
+CLUSTAL 2.1 multiple sequence alignment
+
+
+ref_sequence_CSE2_ORF      MNLQNNVLNQIHQILLPTNPTLDKPNAEATKEEFSSAENRDEKDYLTNQQ 50
+yJHK459_CSE2_ORF           MNLQNNVLNQIHQILLPTNPTLDKPNAEATKEEFSSAENRDEKDYLTNQQ 50
+3_481_CSE2_ORF             MNLQNNVLNQIHQILLPTNPTLDKPNAEATKEEF---------------- 34
+                           **********************************                
+
+ref_sequence_CSE2_ORF      PKNLSTPSTSSNGEFIPHIFYSLHQIRKDPNNLSNQLETLTGSIRHRLKL 100
+yJHK459_CSE2_ORF           PKNLSTPSTSSNGEFIPHIFYSLHQIRKDPNNLSNQLETLTGSIRHRLKL 100
+3_481_CSE2_ORF             --------------------------------------------------
+                                                                             
+
+ref_sequence_CSE2_ORF      CKSLISENEDTKDLLSKSPSEWQDIIHQREQELQIKRDVLDDLYRKLQR 149
+yJHK459_CSE2_ORF           CKSLISENEDTKDLLSKSPSEWQDIIHQREQELQIKRDVLDDLYRKLQR 149
+3_481_CSE2_ORF             ----------------------------RLQKIEMKKTILPTSSRKI-- 53
+                                                       * *::::*: :*    **:  

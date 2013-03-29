@@ -7,6 +7,9 @@ region, promoter region, or "other". If a file includes a segregant pool,
 rank each mutation by its segregation frequency. Output in html format
 with links to read data and alignments.
 
+Please see the README file on my github site for more documentation.
+https://github.com/koschwanez/mutantanalysis
+
 """
 
 import os
