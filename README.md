@@ -3,7 +3,7 @@ by John Koschwanez
 
 This is code I wrote to analyze the results of my experimental evolution. The segregant analysis part of the code accepts three sequences: the ancestor, the clone, and the backcrossed pool. The clone and ancestor are compared to find mutations, and then the segregating percentage of the backcrossed pool is found for each mutation to call a segregant.
 
-Please see the `compare.html` file in the `example_output` directory for an example output for read reads. I have included a script to make simulated reads in the `generate_test_seq` directory.
+Please see the `compare.html` file in the `example_output` directory for an example output for read reads. I have included a script to make simulated reads in the `generate_test_seq` directory. The reference sequence and annotation that I used are in the `ref_seq` directory.
 
 Also included in this package is a script for generating simulated sequences from a backcrossed pool, and scripts for generating a samtools pileup from a fastq file. 
 
@@ -129,7 +129,7 @@ You may occasionally get multiple files for the same sample from the sequencing 
 
     cat yoursample1.fastq yoursample2.fastq yoursample3.fastq > yourtotalsample.fastq
 
-If you don't have a set of samples to use, I have included a script to generate simulated reads for an ancestor, clone, and backcrossed pool: `simseg.sh`. This requires a reference genome in fasta format, and a tab delimited file with substitution descriptions and segregation percentages (0, 20, 40, 60, 80, or 100% segregation.) These files are all included in the `generate_test_seq` directory. Modify `mutation file.txt` as necessary to make your own mutations. To generate sequences, run as follows (assuming you are in the `mutantanalysis` main directory):
+If you don't have a set of samples to use, I have written a script to generate simulated reads for an ancestor, clone, and backcrossed pool: `simseg.sh`. This requires a reference genome in fasta format, and a tab delimited file with substitution descriptions and segregation percentages (0, 20, 40, 60, 80, or 100% segregation.) These files are all included in the `generate_test_seq` directory. Modify `mutation file.txt` as necessary to make your own mutations. To generate sequences, run as follows (assuming you are in the `mutantanalysis` main directory):
 
     cd generate_test_seq
     ./simseg.sh s288c_sgd.fa mutation_file.txt
