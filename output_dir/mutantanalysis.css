@@ -1,0 +1,108 @@
+body {
+	padding: 20px;
+	font-size:100%;
+	background: white;
+}
+
+body a {
+	text-decoration:none;
+	color: #313175;
+}
+
+h1 {
+	font-size:138.5%;
+}
+
+h2 {font-size:138.5%;
+	border-top: 6px solid #4343A1
+	}
+
+h3 {font-size:110%;}
+
+h1,h2,h3, h4 {
+	margin:1em 0;
+	font-weight: bold;
+	}
+	
+h4 {
+	font-size:100%;
+}
+
+#hd {
+	padding: 0px 0 10px 0;
+	margin: 6px 0;
+	border-top: 6px solid #4343A1;
+
+}
+
+#hd h1 {
+	margin: 5px 0;
+	clear:both;
+}
+
+
+.strain_header{
+	padding: 0px 0px 5px 0px;
+}
+#nav li {
+
+	margin: 0 3px 0 0;
+	padding: 5px 0px;
+}
+
+#nav li a {
+	color: #111;
+	text-decoration: none;
+}
+
+.links {
+	padding: 0 0 2em 30px;
+	border-top:1px solid #4343A1;
+}
+
+.allele_entry {
+	clear:both;
+	padding: 10px 10px 2em 30px;
+	border-top:1px solid #4343A1;
+}
+
+.allele_entry h3{
+	margin: 0px 0px 5px 0;
+}
+
+.allele_entry h4{
+	margin: 0px 0px 5px 0;
+}
+
+.allele_entry p{
+	margin:1px 0;
+}
+
+.mutation_info {
+	padding: 0px 0px 20px 0px;
+}
+
+.sample_info_list  {
+	list-style-type: circle;
+	padding: 2px 0px 0px 0px;
+	font-size: 90%;
+}
+
+.ref_base {
+	padding: 2px 0px 0px 0px;
+	font-size: 90%;
+}
+
+.protein_list {
+	padding: 3px 0px 8px 2em;
+	font-family: courier, sans-serif;
+	font-size: 90%;
+}
+
+#ft {
+	margin: 1em 0;
+	padding: 0.5em 0;
+	font-size: 77%;
+	border-top:3px solid #4343A1;
+}
+

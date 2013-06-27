@@ -127,7 +127,7 @@ single_fastq2pileup ()
 paired_fastq2pileup ()
 {
     # $1 is the sample first pair,
-    # $2 is the sample first pair,
+    # $2 is the sample second pair,
     # $3 is the name to be used as the base filename
     # $4 is the ref sequence
     # $5 is GATK
