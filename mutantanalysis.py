@@ -52,7 +52,16 @@ CSS_FILE = os.path.join(CURDIR, 'mutantanalysis.css')
 BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  # Yahoo API. May need to update.
 TABBED_OUTPUT = os.path.join(CURDIR, 'tabbed_output.txt')
 MUTATION_OUTPUT = os.path.join(CURDIR, 'mutation_output.txt')
-CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
+try:
+    CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
+except:
+    try:
+        clustal_pwd = os.path.join(CURDIR, "clustalw")
+        CLUSTAL_BINARY = subprocess.check_output(
+                ["which","clustal_pwd"]).strip()
+    except:
+        print("clustalw must be in environmental path or in working directory")
+        quit()
 
 
 def segregant_analysis_with_clone(
@@ -927,7 +936,7 @@ class Gene(object):
                         + mutated_chr[mutation.position]
                         + ', ref base: ' + mutation.ref_base
                         + ' in sample ' + sample_name)
-                mutated_chr[mutation.position] = mutation.variant_base
+                mutated_chr[mutation.position] = mutation.variant_base[0]
         for mutation in mutation_list:
             #insert or delete bases & adjust remaining mismatch positions
             #using offset_list ON THE CHROMOSOME ONLY
