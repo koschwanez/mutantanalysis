@@ -58,7 +58,7 @@ except:
     try:
         clustal_pwd = os.path.join(CURDIR, "clustalw")
         CLUSTAL_BINARY = subprocess.check_output(
-                ["which","clustal_pwd"]).strip()
+                ["which",clustal_pwd]).strip()
     except:
         print("clustalw must be in environmental path or in working directory")
         quit()
