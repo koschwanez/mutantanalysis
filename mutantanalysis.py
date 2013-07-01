@@ -50,7 +50,6 @@ TEMPLATES = dict(
 )
 CSS_FILE = os.path.join(CURDIR, 'mutantanalysis.css')
 BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  # Yahoo API. May need to update.
-TABBED_OUTPUT = os.path.join(CURDIR, 'tabbed_output.txt')
 MUTATION_OUTPUT = os.path.join(CURDIR, 'mutation_output.txt')
 try:
     CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
@@ -1399,6 +1398,8 @@ class DataOutput(object):
         self.alignment_directory = os.path.join(
             self.output_directory, 'alignment')
         self.reads_directory = os.path.join(self.output_directory, 'reads')
+        self.tabbed_output = open(os.path.join(
+                self.output_directory, 'tabbed_output.txt'), 'w')
         self.make_directories()
         self.templates = {}
         self.load_html_templates()
@@ -1524,9 +1525,7 @@ class DataOutput(object):
 
     def write_multiple_clone_output_html(self, include_reference_differences):
         """Generate html output for multiple clone pipeline."""
-        tabbed_output = open(os.path.join(
-            self.output_directory, TABBED_OUTPUT), 'w')
-        tabbed_output.write(
+        self.tabbed_output.write(
             'gene_name\tsgdid\tchr_num\tposition\tsample_name\tsnp_indel\tref\tread\tfraction\ttot_reads\n')
 
         body_string = ''
@@ -1537,14 +1536,14 @@ class DataOutput(object):
         for gene in self.sorted_genes['Clone variant, nonsynonomous']:
             body_string += self.write_gene(
                 gene, True, self.templates['gene'], self.templates['mutation'],
-                tabbed_output, 'Clone variant, nonsynonomous')
+                self.tabbed_output, 'Clone variant, nonsynonomous')
         body_string += (
             '<h2 id="clone_variant_synonymous">Synonymous, variant among strains:</h2>\n')
         for gene in self.sorted_genes['Clone variant, synonomous']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                tabbed_output, 'Clone variant, synonomous')
+                self.tabbed_output, 'Clone variant, synonomous')
 
         body_string += (
             '<h2 id="clone_variant_promoter">Promoter, variant among strains:</h2>\n')
@@ -1552,7 +1551,7 @@ class DataOutput(object):
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                tabbed_output, 'Clone variant, promoter')
+                self.tabbed_output, 'Clone variant, promoter')
 
         body_string += (
             '<h2 id="clone_variant_other">Other mutation, variant among strains:</h2>\n')
@@ -1560,7 +1559,7 @@ class DataOutput(object):
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                tabbed_output, 'Clone variant, other')
+                self.tabbed_output, 'Clone variant, other')
 
         if include_reference_differences:
             body_string += (
@@ -1569,14 +1568,14 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, True, self.templates['gene'],
                     self.templates['mutation'],
-                    tabbed_output, 'Reference variant, nonsynonomous')
+                    self.tabbed_output, 'Reference variant, nonsynonomous')
             body_string += (
                 '<h2 id="reference_variant_synonymous">Synonymous, reference variant only:</h2>\n')
             for gene in self.sorted_genes['Reference variant, synonomous']:
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    tabbed_output, 'Reference variant, synonomous')
+                    self.tabbed_output, 'Reference variant, synonomous')
 
             body_string += (
                 '<h2 id="reference_variant_promoter">Promoter, reference variant only:</h2>\n')
@@ -1584,7 +1583,7 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    tabbed_output, 'Reference variant, promoter')
+                    self.tabbed_output, 'Reference variant, promoter')
 
             body_string += (
                 '<h2 id="reference_variant_other">Other mutation, reference variant only:</h2>\n')
@@ -1592,7 +1591,7 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    tabbed_output, 'Reference variant, other')
+                    self.tabbed_output, 'Reference variant, other')
 
         navigation_string = """<li id="t_strains"><a href="#strains">Strains</a></li>
             <li id="t_clone_variant_nonsynonymous"><a href="#clone_variant_nonsynonymous">Nonsynonymous, variant among strains</a></li>
@@ -1614,7 +1613,7 @@ class DataOutput(object):
             CSS_FILE=CSS_FILE, BASE_CSS_FILE=BASE_CSS_FILE
         ))
         output_file.close()
-        tabbed_output.close()
+        self.tabbed_output.close()
 
         #Copy CSS file
         shutil.copy(CSS_FILE, self.output_directory)
