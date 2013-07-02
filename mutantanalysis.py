@@ -49,8 +49,7 @@ TEMPLATES = dict(
     mutation=os.path.join(CURDIR, 'seq_mutation_template.html')
 )
 CSS_FILE = os.path.join(CURDIR, 'mutantanalysis.css')
-BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  # Yahoo API. May need to update.
-MUTATION_OUTPUT = os.path.join(CURDIR, 'mutation_output.txt')
+BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  
 try:
     CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
 except:
@@ -519,13 +518,14 @@ class Mutation(object):
                 self.mutation_type == 'backmutation'):
             gene_list_str = \
                 ','.join([gene.gene_name for gene in self.gene_list])
-            mut_template = '%(chr)d\t%(pos)d\t%(snp)s\t%(seg)d\t%(gen)s\n'
+            mut_template = '%(chr)d\t%(pos)d\t%(snp)s\t%(seg)d\t%(gen)s\t%(sam)s\n'
             mut_inserts = {
                 'chr': self.chr_num,
                 'pos': self.position,
                 'snp': self.snp_or_indel,
                 'seg': self.mutation_max_segregating_percent,
-                'gen': gene_list_str
+                'gen': gene_list_str,
+                'sam': self.sample.name
             }
             return(mut_template % mut_inserts)
 
@@ -1079,8 +1079,6 @@ class Gene(object):
             tabbed_output, mutation_type):
         """Output string with gene data for html display.
 
-        tabbed_output is placeholder for future use.
-
         """
         mutation_info_list = []
         sorted_positions = [
@@ -1093,7 +1091,7 @@ class Gene(object):
             reads_filename = \
                 position_summary.generate_relative_reads_filename()
             sample_info_list = position_summary.generate_sample_info_list(
-                tabbed_output)
+                tabbed_output, mutation_type)
             sample_info_string = ''
             for line in sample_info_list:
                 sample_info_string += (
@@ -1286,8 +1284,11 @@ class PositionSummary(object):
         else:
             print("error in mutant sequence generation")
 
-    def generate_sample_info_list(self, tabbed_output):
-        """Generates string for each sample's mutation"""
+    def generate_sample_info_list(self, tabbed_output, mutation_type):
+        """Generates string for each sample's mutation
+
+        Also generates tabbed output.
+        """
         sample_info_list = []
         mut_template = \
             '%(smp)s : %(mut)s %(snp)s from %(anc)s to %(chi)s at %(freq)d percent of %(tot)d reads.'
@@ -1311,7 +1312,7 @@ class PositionSummary(object):
                     'tot': segregant.tot_reads}
                 sample_info_list.append(seg_template % seg_inserts)
             tabbed_output.write(
-                "%s\t%s\t%s\t%i\t%s\t%s\t%s\t%s\t%i\t%i\n" % (
+                "%s\t%s\t%s\t%i\t%s\t%s\t%s\t%s\t%i\t%i\t%s\n" % (
                     self.gene_instance.univ_gene_name,
                     self.gene_instance.sgdid,
                     str(self.chr_num),
@@ -1321,8 +1322,8 @@ class PositionSummary(object):
                     mutation.ref_base,
                     mutation.variant_base,
                     mutation.percent_variant_reads_clone,
-                    mutation.reads_total_clone))
-#                'gene_name\tsgdid\tchr_num\tposition\tsample_name\tsnp_indel\tref\tread\tfraction\ttot_reads\n')
+                    mutation.reads_total_clone,
+                    mutation_type))
         return(sample_info_list)
 
 
@@ -1399,7 +1400,13 @@ class DataOutput(object):
             self.output_directory, 'alignment')
         self.reads_directory = os.path.join(self.output_directory, 'reads')
         self.tabbed_output = open(os.path.join(
-                self.output_directory, 'tabbed_output.txt'), 'w')
+                self.output_directory, 'tabbed_output_by_gene.txt'), 'w')
+        self.tabbed_output.write(
+            'gene_name\tsgdid\tchr_num\tposition\tsample_name\tsnp_indel\tref\tread\tfraction\ttot_reads\tmutation_type\n')
+        self.mutation_output = open(os.path.join(
+            self.output_directory, "tabbed_output_by_mutation.txt"), 'w')
+        self.mutation_output.write(
+            'chr_num\tposition\tsnp_indel\tseg_percent\tgenes\n')
         self.make_directories()
         self.templates = {}
         self.load_html_templates()
@@ -1431,6 +1438,7 @@ class DataOutput(object):
         """Master method called by multiple clone pipeline."""
         self.sort_genes_for_output_nonsegregating()
         self.write_supporting_files()
+        self.write_mutation_seg_list()
         self.write_multiple_clone_output_html(include_reference_differences)
 
     def sort_genes_for_output_segregating(self):
@@ -1525,8 +1533,6 @@ class DataOutput(object):
 
     def write_multiple_clone_output_html(self, include_reference_differences):
         """Generate html output for multiple clone pipeline."""
-        self.tabbed_output.write(
-            'gene_name\tsgdid\tchr_num\tposition\tsample_name\tsnp_indel\tref\tread\tfraction\ttot_reads\n')
 
         body_string = ''
         body_string += self.write_strain_list(self.templates['strain'])
@@ -1536,14 +1542,14 @@ class DataOutput(object):
         for gene in self.sorted_genes['Clone variant, nonsynonomous']:
             body_string += self.write_gene(
                 gene, True, self.templates['gene'], self.templates['mutation'],
-                self.tabbed_output, 'Clone variant, nonsynonomous')
+                'Clone variant, nonsynonomous')
         body_string += (
             '<h2 id="clone_variant_synonymous">Synonymous, variant among strains:</h2>\n')
         for gene in self.sorted_genes['Clone variant, synonomous']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                self.tabbed_output, 'Clone variant, synonomous')
+                'Clone variant, synonomous')
 
         body_string += (
             '<h2 id="clone_variant_promoter">Promoter, variant among strains:</h2>\n')
@@ -1551,7 +1557,7 @@ class DataOutput(object):
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                self.tabbed_output, 'Clone variant, promoter')
+                'Clone variant, promoter')
 
         body_string += (
             '<h2 id="clone_variant_other">Other mutation, variant among strains:</h2>\n')
@@ -1559,7 +1565,7 @@ class DataOutput(object):
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
                 self.templates['mutation'],
-                self.tabbed_output, 'Clone variant, other')
+                'Clone variant, other')
 
         if include_reference_differences:
             body_string += (
@@ -1568,14 +1574,14 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, True, self.templates['gene'],
                     self.templates['mutation'],
-                    self.tabbed_output, 'Reference variant, nonsynonomous')
+                    'Reference variant, nonsynonomous')
             body_string += (
                 '<h2 id="reference_variant_synonymous">Synonymous, reference variant only:</h2>\n')
             for gene in self.sorted_genes['Reference variant, synonomous']:
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    self.tabbed_output, 'Reference variant, synonomous')
+                    'Reference variant, synonomous')
 
             body_string += (
                 '<h2 id="reference_variant_promoter">Promoter, reference variant only:</h2>\n')
@@ -1583,7 +1589,7 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    self.tabbed_output, 'Reference variant, promoter')
+                    'Reference variant, promoter')
 
             body_string += (
                 '<h2 id="reference_variant_other">Other mutation, reference variant only:</h2>\n')
@@ -1591,7 +1597,7 @@ class DataOutput(object):
                 body_string += self.write_gene(
                     gene, False, self.templates['gene'],
                     self.templates['mutation'],
-                    self.tabbed_output, 'Reference variant, other')
+                    'Reference variant, other')
 
         navigation_string = """<li id="t_strains"><a href="#strains">Strains</a></li>
             <li id="t_clone_variant_nonsynonymous"><a href="#clone_variant_nonsynonymous">Nonsynonymous, variant among strains</a></li>
@@ -1625,24 +1631,16 @@ class DataOutput(object):
 
     def write_mutation_seg_list(self):
         """Write tabbed output listing mutations and segregating fraction."""
-        mutation_output = open(os.path.join(
-            self.output_directory, MUTATION_OUTPUT), 'w')
-        mutation_output.write(
-            'chr_num\tposition\tsnp_indel\tseg_percent\tgenes\n')
         for mutation_list in self.analysis.mutation_dict.values():
             for mutation in mutation_list:
                 output_line = \
                     mutation.generate_output_for_mutation_tabbed_output()
                 if output_line:
-                    mutation_output.write(output_line)
-        mutation_output.close()
+                    self.mutation_output.write(output_line)
+        self.mutation_output.close()
 
     def write_segregation_html(self, format):
         """Writes main html file for segregation pipeline."""
-        tabbed_output = open(os.path.join(
-            self.output_directory, TABBED_OUTPUT), 'w')
-        tabbed_output.write(
-            'gene_name\tsgdid\tchr_num\tposition\tsample_name\tsnp_indel\tref\tread\tfraction\ttot_reads\n')
 
         body_string = ''
         body_string += self.write_strain_list(self.templates['strain'])
@@ -1652,32 +1650,32 @@ class DataOutput(object):
         for gene in self.sorted_genes['nonsynonomous']:
             body_string += self.write_gene(
                 gene, True, self.templates['gene'],
-                self.templates['mutation'], tabbed_output, 'nonsynonomous')
+                self.templates['mutation'], 'nonsynonomous')
 
         body_string += (
             '<h2 id="synonymous">Synonymous ORF segregating mutations:</h2>\n')
         for gene in self.sorted_genes['synonomous']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
-                self.templates['mutation'], tabbed_output, 'synonomous')
+                self.templates['mutation'], 'synonomous')
 
         body_string += ('<h2 id="promoter">Promoter segregating mutations:</h2>\n')
         for gene in self.sorted_genes['promoter']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
-                self.templates['mutation'], tabbed_output, 'promoter')
+                self.templates['mutation'], 'promoter')
 
         body_string += ('<h2 id="other">Other segregating mutations:</h2>\n')
         for gene in self.sorted_genes['other_mutations']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
-                self.templates['mutation'], tabbed_output, 'other_mutations')
+                self.templates['mutation'], 'other_mutations')
 
         body_string += ('<h2 id="nonsegregating">Non-segregating mutations:</h2>\n')
         for gene in self.sorted_genes['nonsegregating']:
             body_string += self.write_gene(
                 gene, False, self.templates['gene'],
-                self.templates['mutation'], tabbed_output, 'nonsegregating')
+                self.templates['mutation'], 'nonsegregating')
 
         navigation_string = """
             <li id="t_strains"><a href="#strains">Strains</a></li>
@@ -1697,7 +1695,7 @@ class DataOutput(object):
             CSS_FILE=CSS_FILE, BASE_CSS_FILE=BASE_CSS_FILE
         ))
         output_file.close()
-        tabbed_output.close()
+        self.tabbed_output.close()
 
         #Copy CSS file
         shutil.copy(CSS_FILE, self.output_directory)
@@ -1734,7 +1732,7 @@ class DataOutput(object):
 
     def write_gene(
             self, gene, write_protein, gene_template,
-            mutation_template, tabbed_output, gene_mutation_type):
+            mutation_template, gene_mutation_type):
         """Generate html string for each gene."""
         name_of_gene = gene.gene_name if gene.gene_name else gene.feature_name
 
@@ -1761,7 +1759,7 @@ class DataOutput(object):
             protein_alignment = ''
         mutation_info = gene.write_mutation_info(
             self.output_directory, mutation_template, write_protein,
-            tabbed_output, gene_mutation_type)
+            self.tabbed_output, gene_mutation_type)
         gene_string = gene_template.substitute(
             GENE_NAME=name_of_gene,
             GENE_TYPE=gene.type,
