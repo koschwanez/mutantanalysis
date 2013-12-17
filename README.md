@@ -26,11 +26,11 @@ Also included in this package is a script for generating simulated sequences fro
 
 `singlef2p` will generate a sorted and indel-realigned bam file and a pileup file from a single-end read sample.
 
-    segtools singlef2p -a sample_file.fq [-c sample_name] -g path_to_GATK 
+    segtools singlef2p -a sample_file.fq -c sample_name -g path_to_GATK 
         [-h help] -r reference.fasta -v path_to_Varscan
         OPTIONS
         -a sample_file.fq 
-        -c sample_name (optional)
+        -c sample_name 
         -g path to GATK (optionally set $GATK instead)
         -h help
         -r reference.fasta If this has not been indexed by bwa, segtools will index it using the bwa index routine.
@@ -38,12 +38,13 @@ Also included in this package is a script for generating simulated sequences fro
 
 `pairedf2p` will generate a sorted and indel-realigned bam file and a pileup file from a paired-end read sample.
 
-    segtools pairedf2p -a sample_file.fq [-c sample_name] -g path_to_GATK
+    segtools pairedf2p -a sample_file_R1.fq -b sample_file_R2.fq 
+        -c sample_name -g path_to_GATK
         [-h help] -r reference.fasta -v path_to_Varscan
         OPTIONS
         -a sample_file_R1.fq 
         -b sample_file_R2.fq
-        -c sample_name (optional)
+        -c sample_name
         -g path to GATK (optionally set $GATK instead)
         -h help
         -r reference.fasta If this has not been indexed by bwa, segtools will index it using the bwa index routine.

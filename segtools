@@ -118,6 +118,7 @@ single_fastq2pileup ()
 
     echo "Now creating pileup for $2"
     samtools mpileup \
+        -B \
         -f $3 \
         $2.bam > $2.pileup
 
@@ -167,6 +168,7 @@ paired_fastq2pileup ()
 
     echo "Now creating pileup for $3"
     samtools mpileup \
+        -B \
         -f $4 \
         $3.bam > $3.pileup
 

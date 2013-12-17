@@ -1086,6 +1086,9 @@ class Gene(object):
             for pos in sorted(self.position_summary_dict.keys())]
             # Sorts in order of chromosome location
         for position, position_summary in sorted_positions:
+            if not position_summary.is_clone_mutated_from_ancestor_position(
+                    False):
+                continue
             relative_position = self.find_relative_location(position) + 1
                 #add one to convert from python numbering
             reads_filename = \
