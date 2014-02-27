@@ -48,8 +48,10 @@ TEMPLATES = dict(
     reads=os.path.join(CURDIR, 'seq_read_align_template.html'),
     mutation=os.path.join(CURDIR, 'seq_mutation_template.html')
 )
-CSS_FILE = os.path.join(CURDIR, 'mutantanalysis.css')
-BASE_CSS_FILE = os.path.join(CURDIR, 'reset-fonts-grids.css')  
+CSS_REL = 'mutantanalysis.css'
+CSS_FILE = os.path.join(CURDIR, CSS_REL)
+BASE_CSS_REL = 'reset-fonts-grids.css'
+BASE_CSS_FILE = os.path.join(CURDIR, BASE_CSS_REL)  
 try:
     CLUSTAL_BINARY = subprocess.check_output(["which","clustalw"]).strip()
 except:
@@ -1251,7 +1253,7 @@ class PositionSummary(object):
             read_file = open(full_filename, 'w')
             read_file.write(read_template.substitute(
                 READS=reads_string, CHROMOSOME_NUMBER=self.chr_num,
-                CSS_FILE=CSS_FILE, BASE_CSS_CILE=BASE_CSS_FILE,
+                CSS_FILE=CSS_REL, BASE_CSS_CILE=BASE_CSS_REL,
                 POSITION=non_python_position
             ))
             read_file.close()
@@ -1619,7 +1621,7 @@ class DataOutput(object):
         output_file.write(self.templates['main'].substitute(
             NAVIGATION=navigation_string, BODY=body_string,
             SEQUENCES_TITLE=self.analysis.title,
-            CSS_FILE=CSS_FILE, BASE_CSS_FILE=BASE_CSS_FILE
+            CSS_FILE=CSS_REL, BASE_CSS_FILE=BASE_CSS_REL
         ))
         output_file.close()
         self.tabbed_output.close()
