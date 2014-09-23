@@ -328,7 +328,7 @@ case $routine in
             --min-coverage 4 --min-reads2 2 --min-var-freq 0.05 --p-value 0.5 \
             > $pool_name.indel
 
-        mkdir $output_dir
+        mkdir $output_directory
 
         python $PROGRAMDIR/mutantanalysis.py \
             --title $anal_title \
