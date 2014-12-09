@@ -24,7 +24,7 @@ from operator import attrgetter
 from string import Template
 
 from Bio import SeqIO
-from Bio.SeqFeature import SeqFeature, FeatureLocation
+from Bio.SeqFeature import SeqFeature, FeatureLocation, CompoundLocation
 from Bio.SeqRecord import SeqRecord
 from Bio.Align.Applications import ClustalwCommandline
 from Bio import AlignIO
@@ -674,6 +674,8 @@ class Chromosome(object):
 
     Indexes chromosome, including introns, for lookup. Initiated
     by genome class.
+    record is an attribute that is a SeqRecord object
+    features are added to the record.features list
 
     """
     def __init__(self, number, seq_record):
@@ -706,59 +708,48 @@ class Chromosome(object):
 
     def parse_introns(self):
         """Parse genes with introns. TODO: Much more testing."""
+        #intron_feature is a SeqFeature that is labeled by type "intron"
         intron_features = [
             feature for feature in self.record.features
             if feature.type == 'intron']
+        #Label all parent SeqFeatures with introns using a new atribute, intron
         for intron in intron_features:
             intron_start_loc = int(str(intron.location.start))
-            intron_end_loc = int(str(intron.location.end))
-            parent_features = [
-                parent_feature for parent_feature
-                in self.record.features
+            for parent_feature in self.record.features:
                 if (intron_start_loc in parent_feature
-                    and parent_feature.type != 'intron'
-                    and parent_feature.qualifiers['feature_name'] ==
-                    intron.qualifiers['parent_feature_name'])]
-            for parent in parent_features:
-                parent.location_operator = 'join'
-                parent_start_loc = int(str(parent.location.start))
-                parent_end_loc = int(str(parent.location.end))
-                old_exon_locations = []
-                #First start anew with exon locations
-                if not parent.sub_features:
-                    old_exon_locations.append((
-                        parent_start_loc, parent_end_loc))
-                if parent.sub_features:
-                    for sub_feature in parent.sub_features:
-                        old_exon_locations.append(
-                            (int(str(sub_feature.location.start)),
-                                int(str(sub_feature.location.end)))
-                        )
-                    parent.sub_features = []
-
-                #Now find the exon that need to be split and generate
-                #revised list
-                revised_exon_locations = []
-                for old_location in old_exon_locations:
-                    old_exon_start = old_location[0]
-                    old_exon_end = old_location[1]
-                    if (intron_start_loc > old_exon_start
-                            and intron_end_loc < old_exon_end):
-                        revised_exon_locations.append(
-                            (old_exon_start, intron_start_loc))
-                        revised_exon_locations.append(
-                            (intron_end_loc, old_exon_end))
+                        and parent_feature.type != 'intron'
+                        and parent_feature.qualifiers['feature_name'] ==
+                        intron.qualifiers['parent_feature_name']):
+                    if not hasattr(parent_feature, 'intron'):
+                        parent_feature.intron = [intron]
                     else:
-                        revised_exon_locations.append(
-                            (old_exon_start, old_exon_end))
+                        parent_feature.intron.append(intron)
+        for feature in self.record.features:
+            if hasattr(feature, 'intron'):
+                #Sort introns by start location
+                sorted_intron_list = sorted(
+                    (intron for intron in feature.intron),
+                    key=lambda x: int(str(intron.location.start)))
+                exon_starts = [int(str(feature.location.start))]
+                exon_ends = []
+                for intron in sorted_intron_list:
+                    exon_starts.append(int(str(intron.location.end)))
+                    exon_ends.append(int(str(intron.location.start)))
+                exon_ends.append(int(str(feature.location.end)))
+                feature.exon_start_stop_pairs = zip(exon_starts, exon_ends)
+                seqfeature_list = []
+                for start_site, end_site in feature.exon_start_stop_pairs:
+                    seqfeature_list.append(FeatureLocation(
+                        start_site, end_site,
+                        strand = feature.strand))
+                # antisense requires compound locations in reverse order
+                if feature.strand == -1:
+                    seqfeature_list = reversed(seqfeature_list)
+                new_compound_feature = sum(seqfeature_list)
+                feature.location = new_compound_feature
+                # print(feature)
+                # print(feature.extract(self.record).seq.translate())
 
-                for revised_location in revised_exon_locations:
-                    revised_start = revised_location[0]
-                    revised_end = revised_location[1]
-                    parent.sub_features.append(SeqFeature(
-                        FeatureLocation(
-                            revised_start, revised_end),
-                        strand=parent.strand))
 
 
 class Gene(object):
@@ -897,9 +888,15 @@ class Gene(object):
         all_sample_names = self.clone_ancestor_names + ['ref_sequence']
         for sample_name in all_sample_names:
             # print("Gen prot seq for %s gene %s\n" % (
-            #     sample_name, self.univ_gene_name))
+                # sample_name, self.univ_gene_name))
+            temp_seq = self.dna_sequences[sample_name]
+            # Add trailing Ns if indels make sequence not a multiple of 3
+            if len(temp_seq)%3 == 1:
+                temp_seq = temp_seq + 'NN'
+            elif len(temp_seq)%3 == 2:
+                temp_seq = temp_seq + 'N'
             self.protein_sequences[sample_name] = \
-                self.dna_sequences[sample_name].translate(to_stop=True)
+                temp_seq.translate(to_stop=True)
             if not self.protein_sequences[sample_name]:
                 # Could occur if mutation in first codon. Label 'X' if so.
                 self.protein_sequences[sample_name] = 'X'
@@ -922,8 +919,8 @@ class Gene(object):
         #first adjust the chromosome sequence only for snp and indels
         for mutation in mutation_list:
             # print("%s from %s to %s at pos %i\n" % (
-            #     mutation.snp_or_indel, mutation.ref_base,
-            #     mutation.variant_base, mutation.position))
+                # mutation.snp_or_indel, mutation.ref_base,
+                # mutation.variant_base, mutation.position))
             if mutation.snp_or_indel == 'snp':
                 #Check that the correct base has been chosen:
                 if (mutated_chr[mutation.position].upper()
@@ -945,7 +942,6 @@ class Gene(object):
                 mutation_position_temp = mutation.position
                 insert_or_delete = mutation.variant_base[0]
                 bases = mutation.variant_base[1:]
-                # print(insert_or_delete, bases)
                 if offset_list:
                     for test_pos, num_bases in offset_list:
                         if mutation.position > test_pos:
@@ -954,7 +950,6 @@ class Gene(object):
                     for base in bases[::-1]:
                         if (base == "+" or base == "/" or base == "-"):
                             break
-                        # print("inserting %s\n" % base)
                         mutated_chr.insert(mutation_position_temp + 1, base)
                     offset_list.append((mutation.position, len(bases)))
                 elif insert_or_delete == '-':
@@ -975,27 +970,37 @@ class Gene(object):
                 total_num_offset_bases += num_bases
         new_feature_end = int(str(
             ref_feature.location.end)) + total_num_offset_bases
-        temp_feature = SeqFeature(
-            FeatureLocation(
-                int(str(ref_feature.location.start)), new_feature_end),
-            strand=ref_feature.strand,
-            location_operator=ref_feature.location_operator
-        )
-
-        #Now change the sub feature list
-        if ref_feature.sub_features:
-            for sub_feature in ref_feature.sub_features:
-                start = int(str(sub_feature.location.start))
-                end = int(str(sub_feature.location.end))
+        #Do next only if no introns.
+        if not hasattr(ref_feature, "exon_start_stop_pairs"):
+            temp_feature = SeqFeature(
+                FeatureLocation(
+                    int(str(ref_feature.location.start)), new_feature_end),
+                strand=ref_feature.strand,
+                location_operator=ref_feature.location_operator
+            )
+        else:
+            # TODO: test this section more extensively
+            # print("mutation in gene with intron")
+            # print(ref_feature)
+            new_exon_list = []
+            for (exon_start, exon_end) in ref.feature.exon_start_stop_pairs:
                 if offset_list:
                     for test_pos, num_bases in offset_list:
-                        if start > test_pos:
-                            start += num_bases
-                        if end > test_pos:
-                            end += num_bases
-                temp_feature.sub_features.append(SeqFeature(
-                    FeatureLocation(start, end),
-                    strand=ref_feature.strand))
+                        if exon_start > test_pos:
+                            exon_start += num_bases
+                        if exon_end > test_pos:
+                            exon_end += num_bases
+                new_exon_list.append(exon_start, exon_end)
+            seqfeature_list = []
+            for start_site, end_site in new_exon_list:
+                seqfeature_list.append(FeatureLocation(
+                    start_site, end_site,
+                    strand = ref.feature.strand))
+            # antisense requires compound locations in reverse order
+            if ref.feature.strand == -1:
+                seqfeature_list = reversed(seqfeature_list)
+            new_compound_feature = sum(seqfeature_list)
+            temp_feature.location = new_compound_feature
 
         temp_seqrecord = SeqRecord(mutated_chr.toseq())
         return(temp_feature.extract(temp_seqrecord.seq))
